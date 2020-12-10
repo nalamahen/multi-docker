@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t nalamahen/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true nalamahen/react-test npm test
+
+after_sucess:
+  - docker build -t nalamahen/multi-client ./client
+  - docker build -t nalamahen/multi-nginx ./ngnix
+  - docker build -t nalamahen/multi-server ./server
+  - docker build -t nalamahen/multi-worker ./worker
+  # Log into the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push nalamahen/multi-client
+  - docker push nalamahen/multi-nginx
+  - docker push nalamahen/multi-server
+  - docker push nalamahen/multi-worker
