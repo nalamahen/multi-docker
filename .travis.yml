@@ -17,6 +17,6 @@ after_sucess:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
   - docker push nalamahen/multi-client
-  - docker build -t nalamahen/multi-nginx
+  - docker push nalamahen/multi-nginx
   - docker push nalamahen/multi-server
   - docker push nalamahen/multi-worker
